@@ -1,0 +1,38 @@
+---
+version: '3.3'
+networks:
+  infra:
+    external: true
+services:
+  agent:
+    image: consul:0.9.3
+    networks:
+      infra:
+        aliases:
+          - consul.agent
+    command: "consul agent -config-file /consul/config/config.json"
+    volumes:
+      - /opt/consul:/consul/config
+      - /opt/consul/data:/consul/data
+    ports:
+      - target: 8500
+        published: 8500
+        mode: host
+    depends_on:
+      - server
+    # Deploy the consul agent on all servers which are workers.
+    # Use DNS Round Robin instead VIP for discovery.
+    deploy:
+      mode: global
+      endpoint_mode: dnsrr
+      update_config:
+        parallelism: 1
+        failure_action: rollback
+        delay: 30s
+      restart_policy:
+        condition: any
+        delay: 5s
+        window: 120s
+      placement:
+        constraints:
+          - node.role == worker

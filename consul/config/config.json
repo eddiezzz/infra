@@ -1,0 +1,18 @@
+{
+  "bind_addr": "{{ GetInterfaceIP \"eth0\" }}",
+  "data_dir": "/consul/data",
+  "client_addr": "0.0.0.0",
+  "datacenter": "travel",
+  "leave_on_terminate" : true,
+  "server_name" : "server.travel.consul",
+  "skip_leave_on_interrupt" : true,
+  "server" : true,
+  "bootstrap_expect" : 1,
+  "ui" : true,
+  "autopilot": {
+    "cleanup_dead_servers": true
+  },
+  "disable_update_check": true,
+  "log_level": "debug",
+  "encrypt": "8UEXndDfN7xHR8Rk8b0aZg=="
+}
